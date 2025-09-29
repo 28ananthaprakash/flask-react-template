@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import routes from 'frontend/constants/routes';
 import { useAccountContext, useAuthContext } from 'frontend/contexts';
-import { Dashboard, NotFound } from 'frontend/pages';
+import { NotFound, Tasks } from 'frontend/pages';
 import AppLayout from 'frontend/pages/app-layout/app-layout';
 import { AsyncError } from 'frontend/types';
 
@@ -28,12 +28,17 @@ const App = () => {
   );
 };
 
+const tasksRoutePath = routes.TASKS.startsWith('/')
+  ? routes.TASKS.slice(1)
+  : routes.TASKS;
+
 export const protectedRoutes = [
   {
     path: '',
     element: <App />,
     children: [
-      { path: '', element: <Dashboard /> },
+      { index: true, element: <Navigate to={routes.TASKS} replace /> },
+      { path: tasksRoutePath, element: <Tasks /> },
       { path: '*', element: <NotFound /> },
     ],
   },
